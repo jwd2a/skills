@@ -1,8 +1,4 @@
 __pycache__/
 *.pyc
 *.pyo
-trades.json
-stops_state.json
-price_cache.json
-portfolio.json
 *.env

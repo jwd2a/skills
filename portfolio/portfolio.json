@@ -1,0 +1,72 @@
+{
+  "positions": {
+    "SPY": {
+      "symbol": "SPY",
+      "quantity": 3.2,
+      "cost_basis": 1649.47,
+      "avg_cost": 515.46,
+      "last_price": 683.37,
+      "asset_type": "stock"
+    },
+    "WMT": {
+      "symbol": "WMT",
+      "quantity": 23.063,
+      "cost_basis": 2591.55,
+      "avg_cost": 112.37,
+      "last_price": 127.2,
+      "asset_type": "stock"
+    },
+    "GLD": {
+      "symbol": "GLD",
+      "quantity": 4,
+      "cost_basis": 1866.31,
+      "avg_cost": 466.58,
+      "last_price": 472.04,
+      "asset_type": "stock"
+    },
+    "EQIX": {
+      "symbol": "EQIX",
+      "quantity": 2.51,
+      "cost_basis": 2463.32,
+      "avg_cost": 981.41,
+      "last_price": 995.98,
+      "asset_type": "stock"
+    },
+    "CRS": {
+      "symbol": "CRS",
+      "quantity": 2,
+      "cost_basis": 809.22,
+      "avg_cost": 404.61,
+      "last_price": 404.32,
+      "asset_type": "stock"
+    },
+    "POWL": {
+      "symbol": "POWL",
+      "quantity": 2,
+      "cost_basis": 1016.52,
+      "avg_cost": 508.26,
+      "last_price": 508.26,
+      "asset_type": "stock"
+    },
+    "TRGP": {
+      "symbol": "TRGP",
+      "quantity": 4,
+      "cost_basis": 979.16,
+      "avg_cost": 244.79,
+      "last_price": 244.79,
+      "asset_type": "stock"
+    }
+  },
+  "updated_at": "2026-04-01T16:28:36.681545",
+  "cash": 1966.99,
+  "last_updated": "2026-04-01T16:28:36",
+  "source": "Q2 rebalance phase 1: sold EFA/CME/AAPL, bought 1.51 EQIX + 4 TRGP. Phase 2 pending: buy 4 more TRGP after settlement.",
+  "pending": {
+    "TRGP": {
+      "action": "buy",
+      "shares": 4,
+      "target_date": "2026-04-03",
+      "reason": "T+1 settlement on sells"
+    }
+  }
+}

@@ -1,0 +1,389 @@
+{
+  "account": "Fidelity",
+  "source": "Fidelity CSV export",
+  "startingPositions": {
+    "asOf": "2026-01-01",
+    "note": "Reconstructed from Q1 trade history",
+    "positions": {
+      "AZO": {
+        "quantity": 1.09,
+        "note": "Sold all Jan 6"
+      },
+      "NVDA": {
+        "quantity": 13.59,
+        "note": "Sold all Jan 6"
+      },
+      "MSFT": {
+        "quantity": 2.0,
+        "note": "Sold all Jan 6"
+      },
+      "BELFA": {
+        "quantity": 25.612,
+        "note": "Sold all by Mar 9"
+      },
+      "AAPL": {
+        "quantity": 5.054,
+        "note": "Partially sold, 3.2 remaining"
+      },
+      "GOOGL": {
+        "quantity": 2.895,
+        "note": "Sold all by Feb 24"
+      },
+      "RBLX": {
+        "quantity": 1.0,
+        "note": "Day-traded Jan 6, net sold 1"
+      },
+      "WMT": {
+        "quantity": 0.183,
+        "note": "Added 22.88 on Jan 6"
+      },
+      "SPY": {
+        "quantity": 2.0,
+        "note": "Added 1.2 on Jan 6"
+      }
+    },
+    "cash": 29.6
+  },
+  "trades": [
+    {
+      "date": "2026-01-06",
+      "action": "SELL",
+      "symbol": "AZO",
+      "quantity": 1.09,
+      "price": 3236.33,
+      "proceeds": 3529.53,
+      "note": "Exited entire position"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "SELL",
+      "symbol": "NVDA",
+      "quantity": 13.59,
+      "price": 190.54,
+      "proceeds": 2589.5,
+      "note": "Exited entire position"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "SELL",
+      "symbol": "MSFT",
+      "quantity": 2.6,
+      "price": 472.44,
+      "proceeds": 1228.34,
+      "note": "Sold 2.0 existing + 0.6 quick flip"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "BUY",
+      "symbol": "MSFT",
+      "quantity": 0.6,
+      "price": 471.65,
+      "cost": 282.99,
+      "note": "Quick flip"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "SELL",
+      "symbol": "BELFA",
+      "quantity": 13.43,
+      "price": 151.36,
+      "proceeds": 2033.41,
+      "note": "Partial sell, rebalance"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "BUY",
+      "symbol": "BELFA",
+      "quantity": 6.89,
+      "price": 152.97,
+      "cost": 1053.96,
+      "note": "Rebalance buy-back"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "SELL",
+      "symbol": "AAPL",
+      "quantity": 0.95,
+      "price": 263.58,
+      "proceeds": 250.4,
+      "note": "Partial trim"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "BUY",
+      "symbol": "AAPL",
+      "quantity": 2.35,
+      "price": 264.85,
+      "cost": 622.41
+    },
+    {
+      "date": "2026-01-06",
+      "action": "SELL",
+      "symbol": "RBLX",
+      "quantity": 25.21,
+      "price": 75.17,
+      "proceeds": 1895.16,
+      "note": "Sold all pre-existing + same-day buy"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "BUY",
+      "symbol": "RBLX",
+      "quantity": 24.21,
+      "price": 77.17,
+      "cost": 1868.23,
+      "note": "Day trade, sold same day"
+    },
+    {
+      "date": "2026-01-06",
+      "action": "BUY",
+      "symbol": "GOOGL",
+      "quantity": 13.47,
+      "price": 316.11,
+      "cost": 4259.98
+    },
+    {
+      "date": "2026-01-06",
+      "action": "BUY",
+      "symbol": "WMT",
+      "quantity": 22.88,
+      "price": 112.82,
+      "cost": 2581.66
+    },
+    {
+      "date": "2026-01-06",
+      "action": "BUY",
+      "symbol": "SPY",
+      "quantity": 1.2,
+      "price": 689.69,
+      "cost": 827.63
+    },
+    {
+      "date": "2026-02-13",
+      "action": "SELL",
+      "symbol": "AAPL",
+      "quantity": 3.254,
+      "price": 262.06,
+      "proceeds": 852.74,
+      "note": "Trailing stop triggered"
+    },
+    {
+      "date": "2026-02-13",
+      "action": "SELL",
+      "symbol": "GOOGL",
+      "quantity": 8.3,
+      "price": 307.75,
+      "proceeds": 2554.33,
+      "note": "Trailing stop triggered"
+    },
+    {
+      "date": "2026-02-13",
+      "action": "BUY",
+      "symbol": "GLD",
+      "quantity": 2,
+      "price": 459.37,
+      "cost": 918.74
+    },
+    {
+      "date": "2026-02-13",
+      "action": "BUY",
+      "symbol": "LLY",
+      "quantity": 1,
+      "price": 1055.02,
+      "cost": 1055.02
+    },
+    {
+      "date": "2026-02-13",
+      "action": "BUY",
+      "symbol": "EFA",
+      "quantity": 5,
+      "price": 103.86,
+      "cost": 519.28
+    },
+    {
+      "date": "2026-02-13",
+      "action": "BUY",
+      "symbol": "EQIX",
+      "quantity": 1,
+      "price": 963.32,
+      "cost": 963.32
+    },
+    {
+      "date": "2026-02-24",
+      "action": "SELL",
+      "symbol": "GOOGL",
+      "quantity": 8.065,
+      "price": 310.86,
+      "proceeds": 2507.09,
+      "note": "Exited remaining GOOGL"
+    },
+    {
+      "date": "2026-03-03",
+      "action": "SELL",
+      "symbol": "LLY",
+      "quantity": 1,
+      "price": 1008.63,
+      "proceeds": 1008.63,
+      "note": "Rotated out"
+    },
+    {
+      "date": "2026-03-04",
+      "action": "BUY",
+      "symbol": "CME",
+      "quantity": 2,
+      "price": 320.77,
+      "cost": 641.55
+    },
+    {
+      "date": "2026-03-04",
+      "action": "BUY",
+      "symbol": "CRS",
+      "quantity": 2,
+      "price": 404.61,
+      "cost": 809.22
+    },
+    {
+      "date": "2026-03-04",
+      "action": "BUY",
+      "symbol": "POWL",
+      "quantity": 2,
+      "price": 508.26,
+      "cost": 1016.52
+    },
+    {
+      "date": "2026-03-04",
+      "action": "BUY",
+      "symbol": "GLD",
+      "quantity": 2,
+      "price": 473.79,
+      "cost": 947.57
+    },
+    {
+      "date": "2026-03-05",
+      "action": "SELL",
+      "symbol": "BELFA",
+      "quantity": 10,
+      "price": 188.56,
+      "proceeds": 1885.6,
+      "note": "Exiting BELFA"
+    },
+    {
+      "date": "2026-03-09",
+      "action": "SELL",
+      "symbol": "BELFA",
+      "quantity": 9.072,
+      "price": 166.52,
+      "proceeds": 1510.67,
+      "note": "Final BELFA exit"
+    },
+    {
+      "date": "2026-04-01",
+      "action": "SELL",
+      "symbol": "EFA",
+      "quantity": 5,
+      "price": 98.61,
+      "proceeds": 493.05,
+      "note": "Q2 rebalance \u2014 exit"
+    },
+    {
+      "date": "2026-04-01",
+      "action": "SELL",
+      "symbol": "CME",
+      "quantity": 2,
+      "price": 296.94,
+      "proceeds": 593.88,
+      "note": "Q2 rebalance \u2014 exit"
+    },
+    {
+      "date": "2026-04-01",
+      "action": "SELL",
+      "symbol": "AAPL",
+      "quantity": 3.2,
+      "price": 255.63,
+      "proceeds": 818.02,
+      "note": "Q2 rebalance \u2014 exit"
+    },
+    {
+      "date": "2026-04-01",
+      "action": "BUY",
+      "symbol": "EQIX",
+      "quantity": 1.5,
+      "price": 995.98,
+      "cost": 1493.97,
+      "note": "Q2 rebalance \u2014 add to position"
+    },
+    {
+      "date": "2026-04-01",
+      "action": "BUY",
+      "symbol": "TRGP",
+      "quantity": 4,
+      "price": 244.79,
+      "cost": 979.16,
+      "note": "Q2 rebalance phase 1 \u2014 new position"
+    },
+    {
+      "date": "2026-04-03",
+      "action": "BUY",
+      "symbol": "TRGP",
+      "quantity": 4,
+      "price": 244.39,
+      "cost": 977.56,
+      "note": "Q2 rebalance phase 2 \u2014 second tranche"
+    }
+  ],
+  "dividends": [
+    {
+      "date": "2026-01-05",
+      "symbol": "WMT",
+      "amount": 0.04
+    },
+    {
+      "date": "2026-01-30",
+      "symbol": "SPY",
+      "amount": 3.99
+    },
+    {
+      "date": "2026-01-30",
+      "symbol": "SPAXX",
+      "amount": 0.15
+    },
+    {
+      "date": "2026-01-30",
+      "symbol": "BELFA",
+      "amount": 1.14
+    },
+    {
+      "date": "2026-02-12",
+      "symbol": "AAPL",
+      "amount": 1.68
+    },
+    {
+      "date": "2026-02-27",
+      "symbol": "SPAXX",
+      "amount": 1.02
+    },
+    {
+      "date": "2026-03-18",
+      "symbol": "EQIX",
+      "amount": 5.16
+    },
+    {
+      "date": "2026-03-26",
+      "symbol": "CME",
+      "amount": 14.9
+    }
+  ],
+  "q1Summary": {
+    "startValue": 14808.9,
+    "endValue": 14942.7,
+    "return": 0.9,
+    "spyReturn": -4.81,
+    "alpha": 5.71,
+    "cashEnd": 3535.0,
+    "monthlyReturns": {
+      "january": 6.27,
+      "february": -1.33,
+      "march": -5.98
+    }
+  }
+}

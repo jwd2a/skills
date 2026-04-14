@@ -1,0 +1,55 @@
+{
+  "BELFA": {
+    "trailing_high": 172.94,
+    "consecutive_breach_days": 0
+  },
+  "GOOGL": {
+    "trailing_high": 343.69,
+    "consecutive_breach_days": 2
+  },
+  "NVDA": {
+    "trailing_high": 195.56,
+    "consecutive_breach_days": 0
+  },
+  "AAPL": {
+    "trailing_high": 278.12,
+    "consecutive_breach_days": 1
+  },
+  "WMT": {
+    "trailing_high": 127.95,
+    "consecutive_breach_days": 1
+  },
+  "last_check_date": "2026-04-07",
+  "GLD": {
+    "trailing_high": 490.0,
+    "consecutive_breach_days": 1
+  },
+  "LLY": {
+    "trailing_high": 1107.12,
+    "consecutive_breach_days": 0
+  },
+  "EQIX": {
+    "trailing_high": 1016.08,
+    "consecutive_breach_days": 0
+  },
+  "EFA": {
+    "trailing_high": 105.66,
+    "consecutive_breach_days": 0
+  },
+  "CRS": {
+    "trailing_high": 412.13,
+    "consecutive_breach_days": 0
+  },
+  "CME": {
+    "trailing_high": 297.58,
+    "consecutive_breach_days": 0
+  },
+  "POWL": {
+    "trailing_high": 592.9,
+    "consecutive_breach_days": 1
+  },
+  "TRGP": {
+    "trailing_high": 250.97,
+    "consecutive_breach_days": 0
+  }
+}
