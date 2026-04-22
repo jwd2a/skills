@@ -149,11 +149,15 @@ def report_daily(port: Portfolio) -> str:
     total_value = 0.0
     total_prev = 0.0
     position_changes = []
+    stale_syms = []
 
     for sym in symbols:
         q = quotes[sym]
         pos = port.get_asset(sym)
         price = q.get("price", 0)
+        if not price:
+            price = pos.get("last_price", 0)
+            stale_syms.append(sym)
         prev = q.get("previous_close", price)
         change = price - prev
         change_pct = (change / prev * 100) if prev else 0
@@ -167,12 +171,18 @@ def report_daily(port: Portfolio) -> str:
     spy_pos = port.get_asset("SPY")
     if spy_pos:
         spy_q = quotes["SPY"]
-        total_value += spy_q.get("price", 0) * spy_pos["quantity"]
-        total_prev += spy_q.get("previous_close", spy_q.get("price", 0)) * spy_pos["quantity"]
+        spy_price = spy_q.get("price", 0) or spy_pos.get("last_price", 0)
+        if not spy_q.get("price", 0):
+            stale_syms.append("SPY")
+        total_value += spy_price * spy_pos["quantity"]
+        total_prev += spy_q.get("previous_close", spy_price) * spy_pos["quantity"]
 
     day_change = total_value - total_prev
     day_change_pct = (day_change / total_prev * 100) if total_prev else 0
 
+    if stale_syms:
+        lines.append(f"⚠️ _Live quotes unavailable — using last stored prices for: {', '.join(sorted(set(stale_syms)))}_")
+        lines.append("")
     lines.append(f"*Portfolio*: ${total_value:,.2f} | Today: {fmt_dollar(day_change)} ({fmt_pct(day_change_pct)})")
     lines.append("")
 
