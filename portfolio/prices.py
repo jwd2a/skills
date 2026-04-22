@@ -119,14 +119,16 @@ def get_stock_price(symbol: str, use_cache: bool = True) -> Dict:
             # Fallback to Yahoo Finance if Finnhub doesn't have data
             result = get_stock_price_yahoo(symbol)
 
-        price_cache.set(cache_key, result)
+        if result.get('price', 0) > 0:
+            price_cache.set(cache_key, result)
         return result
 
     except Exception as e:
         # Fallback to Yahoo Finance on error
         try:
             result = get_stock_price_yahoo(symbol)
-            price_cache.set(cache_key, result)
+            if result.get('price', 0) > 0:
+                price_cache.set(cache_key, result)
             return result
         except:
             return {
