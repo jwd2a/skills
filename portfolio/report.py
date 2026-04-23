@@ -133,17 +133,32 @@ def compute_trailing_stop_info(stock_prices: pd.Series, spy_prices: pd.Series) -
 # ── Report generators ──
 
 def report_daily(port: Portfolio) -> str:
-    """Short daily report using Finnhub live quotes."""
+    """Short daily report using Finnhub live quotes, with portfolio last_price fallback."""
     now = datetime.now()
     lines = [f"📊 *Daily Portfolio Report* — {now.strftime('%a %b %d, %Y')}"]
     lines.append("")
 
     symbols = [s for s in port.symbols() if s not in SKIP_SYMBOLS and s != "SPY"]
-    
-    # Fetch live quotes
+
+    # Fetch live quotes; fall back to portfolio last_price when API is unavailable
     quotes = {}
+    using_fallback = False
     for sym in symbols + ["SPY"]:
-        quotes[sym] = get_live_quote(sym)
+        q = get_live_quote(sym)
+        if q.get("price", 0) == 0:
+            pos = port.get_asset(sym)
+            fallback_price = pos.get("last_price", 0) if pos else 0
+            if fallback_price:
+                q = {
+                    "symbol": sym,
+                    "price": fallback_price,
+                    "previous_close": fallback_price,
+                    "change": 0.0,
+                    "change_percent": "0.00%",
+                    "source": "portfolio_cache",
+                }
+                using_fallback = True
+        quotes[sym] = q
 
     # Calculate portfolio value and changes
     total_value = 0.0
@@ -173,6 +188,10 @@ def report_daily(port: Portfolio) -> str:
     day_change = total_value - total_prev
     day_change_pct = (day_change / total_prev * 100) if total_prev else 0
 
+    if using_fallback:
+        lines.append("⚠️ _Live quotes unavailable — using last known prices (intraday changes not shown)_")
+        lines.append("")
+
     lines.append(f"*Portfolio*: ${total_value:,.2f} | Today: {fmt_dollar(day_change)} ({fmt_pct(day_change_pct)})")
     lines.append("")
 
@@ -180,7 +199,7 @@ def report_daily(port: Portfolio) -> str:
     position_changes.sort(key=lambda x: x[2], reverse=True)
     for sym, chg, chg_pct, val in position_changes:
         emoji = "🟢" if chg >= 0 else "🔴"
-        lines.append(f"• {emoji} `{sym}`: {fmt_pct(chg_pct)} ({fmt_dollar(chg * port.get_asset(sym)['quantity'])})")
+        lines.append(f"• {emoji} `{sym}`: {fmt_pct(chg_pct)} ({fmt_dollar(chg * port.get_asset(sym)['quantity'])}) — ${val:,.2f}")
 
     # Best/worst
     best = position_changes[0]
