@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'TODAY=$(date +%Y-%m-%d); REPORT=/home/user/skills/portfolio/reports/${TODAY}.txt; if [ ! -f \"$REPORT\" ]; then /home/user/skills/portfolio/run_daily_report.sh; fi' 2>/dev/null || true",
+            "statusMessage": "Checking daily portfolio report...",
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
