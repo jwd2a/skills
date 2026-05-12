@@ -33,6 +33,7 @@ class Portfolio:
             data = json.load(f)
         self.positions = data.get("positions", {})
         self.updated_at = data.get("updated_at", self.updated_at)
+        self.cash = data.get("cash", 0.0)
 
     def save(self, path: str = None):
         p = path or self.path

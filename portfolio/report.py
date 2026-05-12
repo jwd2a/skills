@@ -133,19 +133,61 @@ def compute_trailing_stop_info(stock_prices: pd.Series, spy_prices: pd.Series) -
 # ── Report generators ──
 
 def report_daily(port: Portfolio) -> str:
-    """Short daily report using Finnhub live quotes."""
+    """Short daily report using Finnhub live quotes, falling back to stored prices."""
     now = datetime.now()
     lines = [f"📊 *Daily Portfolio Report* — {now.strftime('%a %b %d, %Y')}"]
     lines.append("")
 
     symbols = [s for s in port.symbols() if s not in SKIP_SYMBOLS and s != "SPY"]
-    
-    # Fetch live quotes
+
+    # Fetch live quotes; detect if all prices came back zero (API unavailable)
     quotes = {}
     for sym in symbols + ["SPY"]:
         quotes[sym] = get_live_quote(sym)
 
-    # Calculate portfolio value and changes
+    live_ok = any(quotes[s].get("price", 0) > 0 for s in symbols + ["SPY"])
+
+    if not live_ok:
+        # Fall back to stored last_price from portfolio.json
+        lines.append("⚠️ _Live quotes unavailable — using stored prices from portfolio data_")
+        lines.append("")
+        total_value = 0.0
+        position_data = []
+        for sym in symbols:
+            pos = port.get_asset(sym)
+            price = pos.get("last_price", 0)
+            val = price * pos["quantity"]
+            gl = val - pos["cost_basis"]
+            gl_pct = (gl / pos["cost_basis"] * 100) if pos["cost_basis"] else 0
+            total_value += val
+            position_data.append((sym, price, val, gl, gl_pct))
+
+        spy_pos = port.get_asset("SPY")
+        spy_price = spy_pos.get("last_price", 0) if spy_pos else 0
+        if spy_pos:
+            total_value += spy_price * spy_pos["quantity"]
+
+        updated_at = getattr(port, "updated_at", "unknown")
+        lines.append(f"*Portfolio Value*: ${total_value:,.2f}  _(as of {updated_at[:10]})_")
+        lines.append(f"*Cash*: ${getattr(port, 'cash', 0):,.2f}" if hasattr(port, "cash") and port.cash else "")
+        lines.append("")
+
+        position_data.sort(key=lambda x: x[4], reverse=True)
+        lines.append("*Positions (Total P/L from cost basis)*")
+        for sym, price, val, gl, gl_pct in position_data:
+            emoji = "🟢" if gl >= 0 else "🔴"
+            lines.append(f"• {emoji} `{sym}`: ${price:,.2f} → ${val:,.2f} | P/L: {fmt_dollar(gl)} ({fmt_pct(gl_pct)})")
+
+        if position_data:
+            best = position_data[0]
+            worst = position_data[-1]
+            lines.append("")
+            lines.append(f"⬆️ Best P/L: *{best[0]}* {fmt_pct(best[4])} | ⬇️ Worst P/L: *{worst[0]}* {fmt_pct(worst[4])}")
+
+        lines.append(f"📈 SPY: ${spy_price:,.2f} (stored)" if spy_price else "📈 SPY: n/a")
+        return "\n".join(l for l in lines if l is not None)
+
+    # Live quotes available — normal path
     total_value = 0.0
     total_prev = 0.0
     position_changes = []
@@ -163,7 +205,6 @@ def report_daily(port: Portfolio) -> str:
         total_prev += prev_val
         position_changes.append((sym, change, change_pct, val))
 
-    # Add SPY position if held
     spy_pos = port.get_asset("SPY")
     if spy_pos:
         spy_q = quotes["SPY"]
@@ -176,19 +217,16 @@ def report_daily(port: Portfolio) -> str:
     lines.append(f"*Portfolio*: ${total_value:,.2f} | Today: {fmt_dollar(day_change)} ({fmt_pct(day_change_pct)})")
     lines.append("")
 
-    # Position breakdown
     position_changes.sort(key=lambda x: x[2], reverse=True)
     for sym, chg, chg_pct, val in position_changes:
         emoji = "🟢" if chg >= 0 else "🔴"
         lines.append(f"• {emoji} `{sym}`: {fmt_pct(chg_pct)} ({fmt_dollar(chg * port.get_asset(sym)['quantity'])})")
 
-    # Best/worst
     best = position_changes[0]
     worst = position_changes[-1]
     lines.append("")
     lines.append(f"⬆️ Best: *{best[0]}* {fmt_pct(best[2])} | ⬇️ Worst: *{worst[0]}* {fmt_pct(worst[2])}")
 
-    # SPY comparison
     spy_q = quotes["SPY"]
     spy_chg_pct = float(str(spy_q.get("change_percent", "0")).replace("%", ""))
     lines.append(f"📈 SPY: {fmt_pct(spy_chg_pct)}")

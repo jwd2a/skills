@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd /home/user/skills/portfolio && python report.py --cadence daily --json /home/user/skills/portfolio/portfolio.json",
+            "timeout": 60,
+            "statusMessage": "Running daily portfolio report..."
+          }
+        ]
+      }
+    ]
+  }
+}
