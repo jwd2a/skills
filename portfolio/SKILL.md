@@ -3,9 +3,9 @@
 Analyzes Justin's stock portfolio with benchmarking against S&P 500 (SPY).
 
 ## Files
-- `portfolio.py` — Portfolio class for managing positions (also symlinked to `~/.openclaw/`)
+- `portfolio.py` — Portfolio class for managing positions
 - `analyze.py` — Analytics engine (volatility, correlation, Sortino, diversification, growth)
-- `prices.py` — Copy of the price fetching module from `~/.openclaw/`
+- `prices.py` — Price fetching module
 
 ## Usage
 
@@ -115,5 +115,5 @@ See `docs/finance/STRATEGY.md` for the full momentum rotation strategy documenta
 
 ## Notes
 - Uses AlphaVantage for historical prices (5 calls/min free tier, 3s delay between calls)
-- Portfolio data stored as JSON at `~/.openclaw/portfolio.json`
+- Portfolio data stored as JSON at `~/hex/skills/portfolio/portfolio.json`
 - SPAXX (money market) is excluded from analytics

@@ -179,10 +179,6 @@ def load_current_portfolio() -> List[str]:
     """Load current portfolio tickers."""
     portfolio_path = os.path.join(SCRIPT_DIR, "portfolio.json")
     if not os.path.exists(portfolio_path):
-        # Try home directory
-        portfolio_path = os.path.expanduser("~/.openclaw/portfolio.json")
-    
-    if not os.path.exists(portfolio_path):
         return []
     
     try:

@@ -11,15 +11,13 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 DEFAULT_PORTFOLIO_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "portfolio.json")
-# Also check ~/.openclaw/ for the JSON
-ALT_PORTFOLIO_PATH = os.path.expanduser("~/.openclaw/portfolio.json")
 
 SKIP_SYMBOLS = {"SPAXX", "SPAXX**", "FCASH"}
 
 
 class Portfolio:
     def __init__(self, path: str = None):
-        self.path = path or ALT_PORTFOLIO_PATH
+        self.path = path or DEFAULT_PORTFOLIO_PATH
         self.positions: Dict[str, dict] = {}
         self.updated_at: str = datetime.now().isoformat()
         if os.path.exists(self.path):

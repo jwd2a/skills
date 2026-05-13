@@ -17,7 +17,6 @@ import pandas as pd
 
 # Add parent paths so we can import prices / portfolio
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.expanduser("~/.openclaw"))
 
 from portfolio import Portfolio
 
