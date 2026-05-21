@@ -1,0 +1,40 @@
+name: Daily Portfolio Analysis
+
+on:
+  schedule:
+    # 9:30pm UTC = 4:30pm ET, Mon–Fri (after market close)
+    - cron: '30 21 * * 1-5'
+  workflow_dispatch:  # allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r portfolio/requirements.txt
+
+      - name: Generate daily report
+        id: report
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          mkdir -p reports/daily
+          python portfolio/report.py --cadence daily > reports/daily/${DATE}.md
+          echo "date=${DATE}" >> "$GITHUB_OUTPUT"
+
+      - name: Commit report
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/daily/
+          git diff --cached --quiet || git commit -m "Daily portfolio report ${{ steps.report.outputs.date }}"
+          git push
