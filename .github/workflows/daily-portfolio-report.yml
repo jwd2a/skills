@@ -1,0 +1,66 @@
+name: Daily Portfolio Analysis
+
+on:
+  schedule:
+    # 9:45 PM UTC = ~5:45 PM ET, after US market close, weekdays
+    - cron: '45 21 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      cadence:
+        description: 'Report cadence (daily/weekly/monthly/quarterly/yearly)'
+        required: false
+        default: 'daily'
+
+jobs:
+  portfolio-analysis:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install numpy pandas requests
+
+      - name: Run portfolio analysis
+        id: run_report
+        env:
+          REPORT_CADENCE: ${{ github.event.inputs.cadence || 'daily' }}
+        run: |
+          set -e
+          cd portfolio
+          DATE=$(date +%Y-%m-%d)
+          REPORT_DIR="reports"
+          mkdir -p "$REPORT_DIR"
+
+          echo "=== Daily Performance ===" > "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+          echo "" >> "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+          python report.py --cadence "$REPORT_CADENCE" >> "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+
+          echo "" >> "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+          echo "---" >> "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+          echo "" >> "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+          echo "=== Full Portfolio Analytics (90-day) ===" >> "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+          echo "" >> "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+          python analyze.py >> "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+
+          echo "report_path=portfolio/$REPORT_DIR/$DATE-$REPORT_CADENCE.md" >> "$GITHUB_OUTPUT"
+          echo "report_date=$DATE" >> "$GITHUB_OUTPUT"
+
+          cat "$REPORT_DIR/$DATE-$REPORT_CADENCE.md"
+
+      - name: Commit and push report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add portfolio/reports/
+          git diff --staged --quiet || git commit -m "portfolio: daily analysis ${{ steps.run_report.outputs.report_date }}"
+          git push
