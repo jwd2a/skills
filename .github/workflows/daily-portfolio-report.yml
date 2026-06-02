@@ -1,0 +1,31 @@
+name: Daily Portfolio Report
+
+on:
+  schedule:
+    # 4:15 PM ET (20:15 UTC) weekdays — ~45 min after US market close
+    - cron: '15 20 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portfolio
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run daily report
+        run: python report.py --cadence daily
+
+      - name: Run trailing stop check
+        run: python trailing_stops.py --check
