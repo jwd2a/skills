@@ -1,0 +1,127 @@
+name: Daily Portfolio Analysis
+
+on:
+  schedule:
+    # Runs at 9:00 PM UTC = 5:00 PM EDT (after US market close)
+    - cron: '0 21 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      cadence:
+        description: 'Report cadence'
+        required: false
+        default: 'daily'
+        type: choice
+        options:
+          - daily
+          - weekly
+          - monthly
+          - quarterly
+          - yearly
+
+jobs:
+  portfolio-analysis:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: portfolio/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r portfolio/requirements.txt
+
+      - name: Determine cadence
+        id: cadence
+        run: |
+          CADENCE="${{ github.event.inputs.cadence || 'daily' }}"
+          # Promote to weekly on Fridays
+          if [ "$CADENCE" = "daily" ] && [ "$(date +%u)" = "5" ]; then
+            CADENCE="weekly"
+          fi
+          # Promote to monthly on last trading day of the month
+          if [ "$CADENCE" = "weekly" ] && [ "$(date +%d)" -gt "25" ]; then
+            CADENCE="monthly"
+          fi
+          echo "cadence=$CADENCE" >> $GITHUB_OUTPUT
+
+      - name: Run portfolio report
+        id: report
+        working-directory: portfolio
+        run: |
+          echo "Running ${{ steps.cadence.outputs.cadence }} report..."
+          REPORT=$(python report.py --cadence ${{ steps.cadence.outputs.cadence }} 2>&1)
+          echo "$REPORT"
+          # Store for summary
+          {
+            echo 'REPORT<<EOF'
+            echo "$REPORT"
+            echo 'EOF'
+          } >> $GITHUB_ENV
+
+      - name: Run trailing stops check
+        id: stops
+        working-directory: portfolio
+        run: |
+          echo "Checking trailing stops..."
+          STOPS=$(python trailing_stops.py --check 2>&1)
+          echo "$STOPS"
+          {
+            echo 'STOPS<<EOF'
+            echo "$STOPS"
+            echo 'EOF'
+          } >> $GITHUB_ENV
+
+      - name: Run rotation tracker stats
+        id: rotation
+        working-directory: portfolio
+        run: |
+          ROTATION=$(python rotation_tracker.py --stats 2>&1)
+          echo "$ROTATION"
+          {
+            echo 'ROTATION<<EOF'
+            echo "$ROTATION"
+            echo 'EOF'
+          } >> $GITHUB_ENV
+
+      - name: Write job summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY << 'SUMMARY'
+          ## Portfolio Analysis — ${{ steps.cadence.outputs.cadence }}
+
+          ### Daily Report
+          ```
+          SUMMARY
+          echo "$REPORT" >> $GITHUB_STEP_SUMMARY
+          cat >> $GITHUB_STEP_SUMMARY << 'SUMMARY'
+          ```
+
+          ### Trailing Stops
+          ```
+          SUMMARY
+          echo "$STOPS" >> $GITHUB_STEP_SUMMARY
+          cat >> $GITHUB_STEP_SUMMARY << 'SUMMARY'
+          ```
+
+          ### Rotation Tracker
+          ```
+          SUMMARY
+          echo "$ROTATION" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Commit updated stops state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add portfolio/stops_state.json portfolio/price_cache.json 2>/dev/null || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update portfolio state $(date +%Y-%m-%d)"
+            git push
+          fi
