@@ -1,0 +1,44 @@
+name: Daily Portfolio Report
+
+on:
+  schedule:
+    # 9:30 PM UTC = 5:30 PM ET (post-market close)
+    - cron: "30 21 * * 1-5"
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: portfolio/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r portfolio/requirements.txt
+
+      - name: Generate daily portfolio report
+        id: report
+        run: |
+          cd portfolio
+          OUTPUT=$(python report.py --cadence daily)
+          echo "$OUTPUT"
+          # Write to a multi-line env var for the job summary
+          {
+            echo 'REPORT<<EOF'
+            echo "$OUTPUT"
+            echo 'EOF'
+          } >> "$GITHUB_ENV"
+
+      - name: Write job summary
+        run: |
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "$REPORT" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
