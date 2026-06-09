@@ -1,0 +1,45 @@
+name: Daily Portfolio Report
+
+on:
+  schedule:
+    # 9 PM UTC = ~4-5 PM ET (after US market close), weekdays only
+    - cron: '0 21 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r portfolio/requirements.txt
+
+      - name: Run daily portfolio report
+        id: run_report
+        run: |
+          cd portfolio
+          python report.py --cadence daily | tee /tmp/report.txt
+          echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Write to job summary
+        run: |
+          echo "# 📊 Daily Portfolio Report — ${{ steps.run_report.outputs.date }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat /tmp/report.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-report-${{ steps.run_report.outputs.date }}
+          path: /tmp/report.txt
+          retention-days: 90
