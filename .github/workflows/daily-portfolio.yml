@@ -1,0 +1,76 @@
+name: Daily Portfolio Analysis
+
+on:
+  schedule:
+    # 9:30 PM UTC = 5:30 PM ET, weekdays after market close
+    - cron: '30 21 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r portfolio/requirements.txt
+
+      - name: Run portfolio analysis
+        id: report
+        run: |
+          cd portfolio
+          DATE=$(date +%Y-%m-%d)
+          DOW=$(date +%u)   # 1=Mon … 7=Sun
+          DOM=$(date +%-d)  # day of month (no leading zero)
+          MONTH=$(date +%-m)
+          OUTDIR="../reports/$DATE"
+          mkdir -p "$OUTDIR"
+
+          echo "DATE=$DATE" >> "$GITHUB_OUTPUT"
+
+          # ── Daily (always) ──
+          echo "=== Daily Report ===" > "$OUTDIR/daily.txt"
+          python report.py --cadence daily >> "$OUTDIR/daily.txt"
+
+          # ── Trailing stop check (always) ──
+          echo "" >> "$OUTDIR/daily.txt"
+          echo "=== Trailing Stop Check ===" >> "$OUTDIR/daily.txt"
+          python trailing_stops.py --check >> "$OUTDIR/daily.txt" 2>&1 || true
+
+          # ── Weekly on Mondays ──
+          if [ "$DOW" = "1" ]; then
+            python report.py --cadence weekly > "$OUTDIR/weekly.txt"
+          fi
+
+          # ── Monthly on 1st ──
+          if [ "$DOM" = "1" ]; then
+            python report.py --cadence monthly > "$OUTDIR/monthly.txt"
+          fi
+
+          # ── Quarterly on 1st of Jan, Apr, Jul, Oct ──
+          if [ "$DOM" = "1" ] && { [ "$MONTH" = "1" ] || [ "$MONTH" = "4" ] || [ "$MONTH" = "7" ] || [ "$MONTH" = "10" ]; }; then
+            python report.py --cadence quarterly > "$OUTDIR/quarterly.txt"
+          fi
+
+          # ── Yearly on Jan 1 ──
+          if [ "$DOM" = "1" ] && [ "$MONTH" = "1" ]; then
+            python report.py --cadence yearly > "$OUTDIR/yearly.txt"
+          fi
+
+      - name: Commit reports
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/
+          git diff --staged --quiet || git commit -m "Portfolio analysis: ${{ steps.report.outputs.DATE }}"
+          git push
