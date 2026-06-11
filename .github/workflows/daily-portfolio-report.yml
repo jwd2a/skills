@@ -1,0 +1,37 @@
+name: Daily Portfolio Report
+
+on:
+  schedule:
+    # 4:30 PM ET (20:30 UTC) on weekdays — after US market close
+    - cron: "30 20 * * 1-5"
+  workflow_dispatch:
+
+jobs:
+  report:
+    name: Generate Daily Portfolio Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r portfolio/requirements.txt
+
+      - name: Run daily portfolio report
+        id: report
+        working-directory: portfolio
+        run: |
+          output=$(python report.py --cadence daily)
+          echo "$output"
+          # Write to job summary
+          echo "## Portfolio Report — $(date +'%a %b %d, %Y')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "$output" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
