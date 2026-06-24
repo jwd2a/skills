@@ -43,27 +43,15 @@
   },
   "stock_WMT": {
     "symbol": "WMT",
-    "price": 129.13,
-    "change": 1.87,
-    "change_percent": "1.47%",
-    "previous_close": 127.26,
-    "high": 129.69,
-    "low": 126.82,
-    "open": 127.085,
-    "source": "finnhub",
-    "timestamp": "2026-04-09T16:35:09.930994"
+    "error": "HTTPSConnectionPool(host='query1.finance.yahoo.com', port=443): Max retries exceeded with url: /v8/finance/chart/WMT?interval=1d&range=1d (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "price": 0,
+    "timestamp": "2026-06-24T20:11:43.622912"
   },
   "stock_SPY": {
     "symbol": "SPY",
-    "price": 679.91,
-    "change": 3.9,
-    "change_percent": "0.58%",
-    "previous_close": 676.01,
-    "high": 681.16,
-    "low": 673.77,
-    "open": 674.84,
-    "source": "finnhub",
-    "timestamp": "2026-04-09T16:35:10.907477"
+    "error": "HTTPSConnectionPool(host='query1.finance.yahoo.com', port=443): Max retries exceeded with url: /v8/finance/chart/SPY?interval=1d&range=1d (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "price": 0,
+    "timestamp": "2026-06-24T20:11:47.220624"
   },
   "historical_BELFA_90": {
     "symbol": "BELFA",
@@ -9868,15 +9856,9 @@
   },
   "stock_GLD": {
     "symbol": "GLD",
-    "price": 437.91,
-    "change": 3.38,
-    "change_percent": "0.78%",
-    "previous_close": 434.53,
-    "high": 440.905,
-    "low": 435.87,
-    "open": 436.47,
-    "source": "finnhub",
-    "timestamp": "2026-04-09T16:35:10.128318"
+    "error": "HTTPSConnectionPool(host='query1.finance.yahoo.com', port=443): Max retries exceeded with url: /v8/finance/chart/GLD?interval=1d&range=1d (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "price": 0,
+    "timestamp": "2026-06-24T20:11:44.198670"
   },
   "stock_LLY": {
     "symbol": "LLY",
@@ -9892,15 +9874,9 @@
   },
   "stock_EQIX": {
     "symbol": "EQIX",
-    "price": 1031.57,
-    "change": 13.91,
-    "change_percent": "1.37%",
-    "previous_close": 1017.66,
-    "high": 1039.9,
-    "low": 1017.98,
-    "open": 1017.98,
-    "source": "finnhub",
-    "timestamp": "2026-04-09T16:35:10.285135"
+    "error": "HTTPSConnectionPool(host='query1.finance.yahoo.com', port=443): Max retries exceeded with url: /v8/finance/chart/EQIX?interval=1d&range=1d (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "price": 0,
+    "timestamp": "2026-06-24T20:11:44.774402"
   },
   "stock_EFA": {
     "symbol": "EFA",
@@ -9916,15 +9892,9 @@
   },
   "stock_CRS": {
     "symbol": "CRS",
-    "price": 431.21,
-    "change": 3.37,
-    "change_percent": "0.79%",
-    "previous_close": 427.84,
-    "high": 442.88,
-    "low": 427.7119,
-    "open": 430.08,
-    "source": "finnhub",
-    "timestamp": "2026-04-09T16:35:10.447739"
+    "error": "HTTPSConnectionPool(host='query1.finance.yahoo.com', port=443): Max retries exceeded with url: /v8/finance/chart/CRS?interval=1d&range=1d (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "price": 0,
+    "timestamp": "2026-06-24T20:11:45.364553"
   },
   "stock_CME": {
     "symbol": "CME",
@@ -9940,26 +9910,14 @@
   },
   "stock_POWL": {
     "symbol": "POWL",
-    "price": 230.81,
-    "change": 12.74,
-    "change_percent": "5.84%",
-    "previous_close": 218.07,
-    "high": 237.79,
-    "low": 217.51,
-    "open": 217.92,
-    "source": "finnhub",
-    "timestamp": "2026-04-09T16:35:10.594214"
+    "error": "HTTPSConnectionPool(host='query1.finance.yahoo.com', port=443): Max retries exceeded with url: /v8/finance/chart/POWL?interval=1d&range=1d (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "price": 0,
+    "timestamp": "2026-06-24T20:11:45.971687"
   },
   "stock_TRGP": {
     "symbol": "TRGP",
-    "price": 244.75,
-    "change": 0.75,
-    "change_percent": "0.31%",
-    "previous_close": 244.0,
-    "high": 250.72,
-    "low": 243.0119,
-    "open": 244.73,
-    "source": "finnhub",
-    "timestamp": "2026-04-09T16:35:10.744578"
+    "error": "HTTPSConnectionPool(host='query1.finance.yahoo.com', port=443): Max retries exceeded with url: /v8/finance/chart/TRGP?interval=1d&range=1d (Caused by ProxyError('Unable to connect to proxy', OSError('Tunnel connection failed: 403 Forbidden')))",
+    "price": 0,
+    "timestamp": "2026-06-24T20:11:46.541771"
   }
 }
